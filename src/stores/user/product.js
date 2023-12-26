@@ -67,5 +67,10 @@ export const useProductStore = defineStore('product', {
       price: 100,
     },
     ]
-  })
+  }),
+  actions: {
+    filterProducts(searchText) {
+      return this.list.filter(product => product.name.includes(searchText));
+    }
+  }
 })
