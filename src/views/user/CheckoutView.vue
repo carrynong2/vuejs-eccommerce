@@ -1,9 +1,11 @@
 <script setup>
 import UserLayout from "@/layouts/UserLayout.vue";
 import { reactive } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 import { useCartStore } from "@/stores/user/cart.js";
+
+const router = useRouter();
 
 const cartStore = useCartStore();
 const formData = [
@@ -33,7 +35,8 @@ const userFormData = reactive({
 });
 
 const payment = () => {
-  console.log(userFormData);
+  cartStore.placeorder(userFormData);
+  router.push({ name: "success" });
 };
 </script>
 
@@ -53,7 +56,7 @@ const payment = () => {
             class="input input-bordered w-full"
           />
         </div>
-        <button @click="payment" class="btn btn-neutral w-full mt-4">
+        <button @click="payment()" class="btn btn-neutral w-full mt-4">
           ชำระเงิน
         </button>
       </section>

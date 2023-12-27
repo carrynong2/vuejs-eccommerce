@@ -1,7 +1,77 @@
 <script setup>
+import { ref, onMounted } from "vue";
 import UserLayout from "@/layouts/UserLayout.vue";
+import { useCartStore } from "@/stores/user/cart.js";
+
+const cartStore = useCartStore();
+const orderData = ref({});
+
+onMounted(() => {
+  cartStore.loadCheckout();
+  if (cartStore.checkout.orderNumber) {
+    orderData.value = cartStore.checkout;
+  }
+});
 </script>
 
 <template>
-  <UserLayout> SuccessView Page </UserLayout>
+  <UserLayout>
+    <div class="max-w-2xl mx-auto border border-base-200 shadow-xl p-8 my-4">
+      <div>
+        <div class="text-2xl font-bold">Your order is success!</div>
+        <div>Hi {{ orderData.name }}</div>
+        <div>เตรียมรอรับสินค้าได้เลย</div>
+      </div>
+      <div class="divider"></div>
+      <div class="grid grid-cols-4 gap-2">
+        <div>
+          <div class="font-bold">Order date</div>
+          <div class="text-lg">{{ orderData.createdDate }}</div>
+        </div>
+        <div>
+          <div class="font-bold">Order number</div>
+          <div class="text-lg">{{ orderData.orderNumber }}</div>
+        </div>
+        <div>
+          <div class="font-bold">Payment method</div>
+          <div class="text-lg">{{ orderData.paymentMethod }}</div>
+        </div>
+        <div>
+          <div class="font-bold">Address</div>
+          <div class="text-lg">{{ orderData.address }}</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div
+        v-for="product in orderData.products"
+        class="grid grid-cols-4 gap-2 mb-4 items-center"
+      >
+        <div>
+          <img class="w-full" :src="product.imageUrl" alt="" />
+        </div>
+        <div>
+          <b>{{ product.name }}</b>
+        </div>
+        <div>จำนวน: {{ product.quantity }}</div>
+        <div>ราคารวม {{ product.price * product.quantity }}</div>
+      </div>
+      <div class="divider"></div>
+      <div class="flex justify-between">
+        <div class="font-bold">ราคาสินค้าทั้งหมด</div>
+        <div>{{ orderData.totalPrice }}</div>
+      </div>
+      <div class="divider"></div>
+      <div class="flex justify-between mt-4">
+        <div>ค่าส่ง</div>
+        <div>0</div>
+      </div>
+      <div class="divider"></div>
+      <div class="flex justify-between mt-4">
+        <div>ราคาทั้งสิ้น</div>
+        <div>{{ orderData.totalPrice }}</div>
+      </div>
+      <div class="divider"></div>
+      <div>ขอบคุณที่มาซื้อของเรา</div>
+    </div>
+  </UserLayout>
 </template>

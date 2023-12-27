@@ -4,7 +4,7 @@ import SearchView from '@/views/user/SearchView.vue'
 import ProfileView from '@/views/user/ProfileView.vue'
 import CartView from '@/views/user/CartView.vue'
 import CheckoutView from '@/views/user/CheckoutView.vue'
-import SuccessView from '@/views/user/CheckoutView.vue'
+import SuccessView from '@/views/user/SuccessView.vue'
 
 
 const router = createRouter({
