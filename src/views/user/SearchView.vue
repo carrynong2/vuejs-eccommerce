@@ -1,14 +1,18 @@
 <script setup>
 import { ref, computed, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import UserLayout from "@/layouts/UserLayout.vue";
 import Product from "@/components/Product.vue";
 
+import { useCartStore } from "@/stores/user/cart";
 import { useProductStore } from "@/stores/user/product";
+
+const cartStore = useCartStore();
 const productStore = useProductStore();
 
 const route = useRoute();
+const router = useRouter();
 const searchText = ref("");
 
 watch(
@@ -22,6 +26,13 @@ watch(
 const filterProducts = computed(() => {
   return productStore.filterProducts(searchText.value);
 });
+
+const addToCart = (product) => {
+  cartStore.addToCart(product);
+  router.push({
+    name: "cart",
+  });
+};
 </script>
 
 <template>
@@ -29,6 +40,6 @@ const filterProducts = computed(() => {
     <div class="text-3xl m-4">
       Search: <b>{{ searchText }}</b>
     </div>
-    <Product :products="filterProducts" />
+    <Product :products="filterProducts" :addToCart="addToCart" />
   </UserLayout>
 </template>
