@@ -1,6 +1,6 @@
 <script setup>
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, reactive, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useAdminProoductStore } from "@/stores/admin/product";
 
 import AdminLayout from "@/layouts/AdminLayout.vue";
@@ -30,6 +30,10 @@ const formData = [
 
 const adminProductStore = useAdminProoductStore();
 const router = useRouter();
+const route = useRoute();
+
+const productIndex = ref(-1);
+const mode = ref("ADD");
 
 const productData = reactive({
   name: "",
@@ -40,16 +44,36 @@ const productData = reactive({
   status: "",
 });
 
-const addProduct = () => {
-  adminProductStore.addProduct(productData);
+const updateProduct = () => {
+  if (mode.value === "EDIT") {
+    adminProductStore.updateProduct(productIndex.value, productData);
+  } else {
+    adminProductStore.addProduct(productData);
+  }
   router.push({ name: "admin-products-list" });
 };
+
+onMounted(() => {
+  if (route.params.id) {
+    productIndex.value = parseInt(route.params.id);
+    mode.value = "EDIT";
+
+    const selectedProduct = adminProductStore.getProduct(productIndex.value);
+
+    productData.name = selectedProduct.name;
+    productData.image = selectedProduct.image;
+    productData.price = selectedProduct.price;
+    productData.quantity = selectedProduct.quantity;
+    productData.about = selectedProduct.about;
+    productData.status = selectedProduct.status;
+  }
+});
 </script>
 
 <template>
   <AdminLayout>
     <div class="shadow-xl p-8 mt-4">
-      <div class="text-1xl font-bold">ADD</div>
+      <div class="text-1xl font-bold">{{ mode }}</div>
       <div class="divider"></div>
       <div class="grid grid-cols-2 gap-2">
         <div v-for="form in formData" class="form-control w-full">
@@ -78,7 +102,9 @@ const addProduct = () => {
       </div>
       <div class="flex justify-end mt-4">
         <button class="btn btn-ghost">Back</button>
-        <button class="btn btn-neutral" @click="addProduct()">Add</button>
+        <button class="btn btn-neutral" @click="updateProduct()">
+          {{ mode }}
+        </button>
       </div>
     </div>
   </AdminLayout>
