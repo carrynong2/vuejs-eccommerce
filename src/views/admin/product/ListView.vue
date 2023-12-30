@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 import { useAdminProoductStore } from "@/stores/admin/product";
 
 import AdminLayout from "@/layouts/AdminLayout.vue";
+
 import Edit from "@/components/icons/Edit.vue";
 import Trash from "@/components/icons/Trash.vue";
 import Table from "@/components/Table.vue";
