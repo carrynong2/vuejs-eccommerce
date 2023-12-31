@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from "vue-router";
 
-import { useAdminProoductStore } from "@/stores/admin/product";
+import { useAdminProductStore } from "@/stores/admin/product";
 
 import AdminLayout from "@/layouts/AdminLayout.vue";
 
@@ -11,7 +11,7 @@ import Table from "@/components/Table.vue";
 
 import { onMounted } from "vue";
 
-const adminProductStore = useAdminProoductStore();
+const adminProductStore = useAdminProductStore();
 
 onMounted(() => {
   adminProductStore.loadProducts();
@@ -49,7 +49,7 @@ const removeProduct = (index) => {
         <tr v-for="(product, index) in adminProductStore.list">
           <th>{{ product.name }}</th>
           <td>
-            <img :src="product.image" class="w-12" />
+            <img :src="product.imageUrl" class="w-12" />
           </td>
           <td>{{ product.price }}</td>
           <td>{{ product.remainQuantity }} / {{ product.quantity }}</td>

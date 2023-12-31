@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 
 
-export const useAdminProoductStore = defineStore('admin-product', {
+export const useAdminProductStore = defineStore('admin-product', {
   state: () => ({
     list: [],
-    loaded: false
+    loaded: false,
   }),
   actions: {
     loadProducts() {

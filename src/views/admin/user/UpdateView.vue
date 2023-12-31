@@ -3,6 +3,7 @@ import { ref, onMounted, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "@/layouts/AdminLayout.vue";
 import { useAdminUserStore } from "@/stores/admin/user";
+import { useEventStore } from "@/stores/event";
 
 const formData = [
   {
@@ -25,6 +26,7 @@ const formData = [
 ];
 
 const adminUserStore = useAdminUserStore();
+const eventStore = useEventStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -46,6 +48,7 @@ onMounted(() => {
 
 const updateUser = () => {
   adminUserStore.updateUser(userIndex.value, userData);
+  eventStore.popupMessage("info", "Update user success");
   router.push({ name: "admin-users-list" });
 };
 </script>
@@ -79,7 +82,9 @@ const updateUser = () => {
         </div>
       </div>
       <div class="flex justify-end mt-4">
-        <button class="btn btn-ghost">Back</button>
+        <RouterLink :to="{ name: 'admin-users-list' }" class="btn btn-ghost"
+          >Back</RouterLink
+        >
         <button class="btn btn-neutral" @click="updateUser()">Update</button>
       </div>
     </div>

@@ -1,6 +1,5 @@
 <script setup>
 import AdminLayout from "@/layouts/AdminLayout.vue";
-
 const priceChart = {
   options: {
     chart: {

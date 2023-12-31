@@ -28,9 +28,7 @@ const changeStatus = (index) => {
         <td>
           <div
             class="badge"
-            :class="
-              user.status === 'active' ? 'badge-success' : 'badge-secondary'
-            "
+            :class="user.status === 'active' ? 'badge-success' : 'badge-ghost'"
           >
             {{ user.status }}
           </div>

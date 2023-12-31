@@ -1,9 +1,10 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useAdminProoductStore } from "@/stores/admin/product";
+import { useAdminProductStore } from "@/stores/admin/product";
 
 import AdminLayout from "@/layouts/AdminLayout.vue";
+import { useEventStore } from "@/stores/event";
 
 const formData = [
   {
@@ -12,7 +13,7 @@ const formData = [
   },
   {
     name: "Image",
-    field: "image",
+    field: "imageUrl",
   },
   {
     name: "Price",
@@ -28,7 +29,8 @@ const formData = [
   },
 ];
 
-const adminProductStore = useAdminProoductStore();
+const adminProductStore = useAdminProductStore();
+const eventStore = useEventStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -37,7 +39,7 @@ const mode = ref("ADD");
 
 const productData = reactive({
   name: "",
-  image: "",
+  imageUrl: "",
   price: 0,
   quantity: 0,
   about: "",
@@ -47,8 +49,10 @@ const productData = reactive({
 const updateProduct = () => {
   if (mode.value === "EDIT") {
     adminProductStore.updateProduct(productIndex.value, productData);
+    eventStore.popupMessage("info", "Update product success");
   } else {
     adminProductStore.addProduct(productData);
+    eventStore.popupMessage("info", "Add product success");
   }
   router.push({ name: "admin-products-list" });
 };
@@ -61,7 +65,7 @@ onMounted(() => {
     const selectedProduct = adminProductStore.getProduct(productIndex.value);
 
     productData.name = selectedProduct.name;
-    productData.image = selectedProduct.image;
+    productData.imageUrl = selectedProduct.imageUrl;
     productData.price = selectedProduct.price;
     productData.quantity = selectedProduct.quantity;
     productData.about = selectedProduct.about;
@@ -101,7 +105,9 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex justify-end mt-4">
-        <button class="btn btn-ghost">Back</button>
+        <RouterLink :to="{ name: 'admin-products-list' }" class="btn btn-ghost"
+          >Back</RouterLink
+        >
         <button class="btn btn-neutral" @click="updateProduct()">
           {{ mode }}
         </button>
